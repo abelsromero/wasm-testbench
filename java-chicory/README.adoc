@@ -1,0 +1,12 @@
+= Experiment to run Ruby.wasm via Chicory
+
+== Requirements
+
+* https://github.com/ruby/ruby.wasm[ruby.wasm]
+
+== Running
+
+IMPORTANT: Grant access to Ruby files with `--dir`, otherwise `ruby.wasm: No such file or directory -- ruby/hello.rb (LoadError)`.
+
+ wasmtime --dir ruby ruby.wasm -- hello.rb
+

@@ -1,0 +1,19 @@
+[package]
+name = "rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "random_numbers"
+path = "src/random_numbers.rs"
+
+[[bin]]
+name = "hello"
+path = "src/hello.rs"
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8.5"
+wasm-bindgen = "0.2.95"

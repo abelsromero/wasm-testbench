@@ -1,0 +1,21 @@
+= WASM test & demos
+
+Personal repo for WASM experimentation.
+Currently, only aims to:
+
+* Build Rust example that compiles and runs in several runtimes
+* Run Ruby code using https://github.com/ruby/ruby.wasm[ruby.wasm]
+* Setup for Java comparison.
+
+NOTE: The test is bound by the printing and reports similar results in all platform (except for CPU utilization)
+Do not use for benchmarking.
+
+
+== Requirements
+
+Install
+
+* https://github.com/bytecodealliance/wasmtime[wasmtime]
+// wasmtime-v26.0.1-x86_64-linux.tar.xz
+* https://github.com/wasmerio/wasmer[wasmer]
+// wasmer-linux-amd64.tar.gz
