@@ -29,5 +29,4 @@ class ModuleRunnerTest {
 
         assertThat(output).isEqualTo("Hello Testy!\n");
     }
-
 }

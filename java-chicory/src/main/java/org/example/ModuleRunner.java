@@ -27,24 +27,28 @@ public class ModuleRunner {
     }
 
     public String run(String modulePath, List<String> args) {
+        final var result = load(modulePath, args);
+        // NOTE: Also works. Runs _start on init, hence main method is run.
+        // createInstance(wasi, module);
+        return result.output();
+    }
 
+    public RunResult load(String modulePath, List<String> args) {
         final Module module = Parser.parse(new File(modulePath));
 
         final Logger logger = new SystemLogger();
         final var fakeStdout = new MockPrintStream();
 
         final WasiOptions options = WasiOptions.builder()
-            .withStderr(System.err)
+            .withStderr(fakeStdout)
             .withStdout(fakeStdout)
             .withArguments(args)
             .build();
         final WasiPreview1 wasi = new WasiPreview1(logger, options);
 
-        createStore(wasi, module);
-        // NO TE: Also works. Runs _start on init, hence mein method is run.
-        // createInstance(wasi, module);
+        Instance instance = createStore(wasi, module);
 
-        return fakeStdout.output();
+        return new RunResult(instance, fakeStdout.output());
     }
 
     private static Instance createInstance(WasiPreview1 wasi, Module module) {
@@ -60,6 +64,9 @@ public class ModuleRunner {
         return new Store()
             .addFunction(wasi.toHostFunctions())
             .instantiate("my-module", module);
+    }
+
+    record RunResult(Instance instance, String output) {
     }
 
     private final class MockPrintStream extends PrintStream {
