@@ -12,7 +12,7 @@ class ModuleRunnerTest {
     private static final String NUMBERS_MODULE = MODULES_PATH + "random_numbers.wasm";
     private static final String HELLO_MODULE = MODULES_PATH + "hello.wasm";
 
-    private final ModuleRunner runner = new ModuleRunner();
+    private final ChicoryModuleRunner runner = new ChicoryModuleRunner();
 
     @Test
     void should_run_Rust_simple_cli() {

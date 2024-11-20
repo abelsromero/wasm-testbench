@@ -17,7 +17,7 @@ class RubyRunnerTest {
 //        final RubyRunner runner = new RubyRunner(RUBY_RUNTIME_PATH);
 //        runner.run(RUBY_SCRIPT);
 
-        ModuleRunner runner = new ModuleRunner();
+        ChicoryModuleRunner runner = new ChicoryModuleRunner();
         String output = runner.run(RUBY_RUNTIME_PATH, List.of("-h"));
 
         System.out.println("cosa");

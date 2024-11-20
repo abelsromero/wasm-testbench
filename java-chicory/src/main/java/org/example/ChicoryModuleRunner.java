@@ -20,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 /**
  * Runs WASM module.
  */
-public class ModuleRunner {
+public class ChicoryModuleRunner implements org.example.Module {
 
     public String run(String modulePath) {
         return run(modulePath, List.of());

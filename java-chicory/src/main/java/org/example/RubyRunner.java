@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.ModuleRunner.RunResult;
+import org.example.ChicoryModuleRunner.RunResult;
 
 import java.util.List;
 
@@ -12,14 +12,11 @@ public class RubyRunner {
     private final RunResult instance;
 
     public RubyRunner(String rubyRuntimePath) {
-        ModuleRunner moduleRunner = new ModuleRunner();
+        ChicoryModuleRunner moduleRunner = new ChicoryModuleRunner();
         this.instance = moduleRunner.load(rubyRuntimePath, List.of());
-        System.out.println("12");
     }
 
     public void run(String script) {
-
-
 
     }
 }
