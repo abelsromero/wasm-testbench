@@ -16,35 +16,43 @@ import java.io.PrintStream;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.example.Options.REDIRECT_ERROR;
+import static org.example.Options.REDIRECT_OUTPUT;
 
 /**
  * Runs WASM module.
  */
-public class ChicoryModuleRunner implements org.example.Module {
+public class ChicoryModuleRunner implements ModuleRunner {
 
     public String run(String modulePath) {
-        return run(modulePath, List.of());
+        return run(modulePath, List.of(), REDIRECT_OUTPUT);
     }
 
-    public String run(String modulePath, List<String> args) {
-        final var result = load(modulePath, args);
+    public String run(String modulePath, List<String> args, Options... options) {
+        final var result = load(modulePath, args, options);
         // NOTE: Also works. Runs _start on init, hence main method is run.
         // createInstance(wasi, module);
         return result.output();
     }
 
-    public RunResult load(String modulePath, List<String> args) {
+    public RunResult load(String modulePath, List<String> args, Options... options) {
         final Module module = Parser.parse(new File(modulePath));
 
-        final Logger logger = new SystemLogger();
         final var fakeStdout = new MockPrintStream();
+        final var optionsBuilder = WasiOptions.builder();
+        for (Options opt : options) {
+            if (opt.equals(REDIRECT_OUTPUT)) {
+                optionsBuilder.withStdout(fakeStdout);
+            }
+            if (opt.equals(REDIRECT_ERROR)) {
+                optionsBuilder.withStderr(fakeStdout);
+            }
+        }
 
-        final WasiOptions options = WasiOptions.builder()
-            .withStderr(fakeStdout)
-            .withStdout(fakeStdout)
-            .withArguments(args)
-            .build();
-        final WasiPreview1 wasi = new WasiPreview1(logger, options);
+        optionsBuilder.withArguments(args);
+
+        final Logger logger = new SystemLogger();
+        final WasiPreview1 wasi = new WasiPreview1(logger, optionsBuilder.build());
 
         Instance instance = createStore(wasi, module);
 
