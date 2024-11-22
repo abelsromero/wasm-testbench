@@ -1,6 +1,7 @@
 include(
     'java-api',
     'java-chicory',
-    'java-counterpart'
+    'java-counterpart',
+    'rust'
 )
 

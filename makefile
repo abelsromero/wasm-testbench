@@ -11,7 +11,7 @@ clean:
 	cargo clean $(RUST_FLAGS)
 	./gradlew clean
 
-build $(RUST_OUT):
+rust_build $(RUST_OUT):
 	cargo build --bin random_numbers --release --target wasm32-wasip1 $(RUST_FLAGS)
 	cargo build --bin hello --release --target wasm32-wasip1 $(RUST_FLAGS)
 
