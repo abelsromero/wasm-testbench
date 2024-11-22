@@ -8,6 +8,7 @@ repositories {
 
 dependencies {
     implementation project(':java-api')
+    implementation project(':rust')
     implementation 'com.dylibso.chicory:wasi:1.0.0-M1'
 
     testImplementation(platform('org.junit:junit-bom:5.11.3'))
@@ -22,6 +23,7 @@ java {
 }
 
 tasks.named('test') {
+    dependsOn(':rust:build')
     useJUnitPlatform()
-    maxHeapSize="1024m"
+    maxHeapSize = "1024m"
 }

@@ -1,0 +1,28 @@
+plugins {
+    id 'base'
+}
+
+String[] buildCommand(String bin) {
+    return new String[]{'cargo', 'build', '--bin', bin, '--target', 'wasm32-wasip1', '--release'}
+}
+
+tasks.named('build') {
+    dependsOn tasks.matching { it.name.startsWith('build-') }
+}
+
+['random_numbers', 'hello'].each { bin ->
+    tasks.register("build-${bin}", Exec) {
+        commandLine buildCommand(bin)
+    }
+}
+
+tasks.register('run', Exec) {
+    dependsOn 'buildRust'
+    commandLine 'cargo', 'run', '--release'
+}
+
+tasks.named('clean') {
+    doLast {
+        file('target').deleteDir()
+    }
+}
