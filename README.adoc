@@ -1,21 +1,60 @@
 = WASM test & demos
+:current-date: 23/11/2024
 
 Personal repo for WASM experimentation.
 Currently, only aims to:
 
 * Build Rust example that compiles and runs in several runtimes
 * Run Ruby code using https://github.com/ruby/ruby.wasm[ruby.wasm]
-* Setup for Java comparison.
 
-NOTE: The test is bound by the printing and reports similar results in all platform (except for CPU utilization)
-Do not use for benchmarking.
-
+NOTE: This is not a format benchmarking test suite.
 
 == Requirements
 
-Install
+=== Java runtimes tests
+
+* Rust
+    . Follow instructions in https://www.rust-lang.org/tools/install
+    . Install WASM compilation targets:
+
+ rustup target add wasm32-unknown-unknown
+ rustup target add wasm32-wasi
+ rustup target add wasm32-wasip1
+ rustup target add wasm32-wasip2
+
+* Install `wasmer-java` dependency
+
+ make install_wasmer
+
+=== Binary WASM examples
 
 * https://github.com/bytecodealliance/wasmtime[wasmtime]
+. Download and add to path
+
 // wasmtime-v26.0.1-x86_64-linux.tar.xz
 * https://github.com/wasmerio/wasmer[wasmer]
 // wasmer-linux-amd64.tar.gz
+. Download and add to path
+
+== Running
+
+=== Java runtimes tests
+
+ ./gradlew :java-chicory:test
+ ./gradlew :java-wasmer:test
+
+As of current date ({current-date}) only Chicory `wasm32-wasi` and `wasm32-wasip1` pass.
+
+`wasmer-java` seems to be outdated (last release Jan 5, 2021) and not compatible with recent WASM formats.
+
+=== Binary WASM examples
+
+Junit tests are used to test compatibility options.
+Some are expected to fail.
+
+ make run_wasmtime
+ make run_wasmer
+
+== Next steps
+
+* Graal WASM https://www.graalvm.org/latest/reference-manual/wasm/

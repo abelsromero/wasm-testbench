@@ -10,12 +10,12 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.example.Options.REDIRECT_OUTPUT;
 
-class ChicoryModuleRunnerTest {
+class WasmerModuleRunnerTest {
 
     private static final String NUMBERS_MODULE = "random_numbers.wasm";
     private static final String HELLO_MODULE = "hello.wasm";
 
-    private final ModuleRunner runner = new ChicoryModuleRunner();
+    private final ModuleRunner runner = new WasmerModuleRunner();
 
     @ParameterizedTest
     @MethodSource("compilationTargets")
@@ -51,5 +51,4 @@ class ChicoryModuleRunnerTest {
             Arguments.of("wasm32-wasip2")
         );
     }
-
 }

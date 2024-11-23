@@ -6,6 +6,8 @@ JAVA_OUT := java-counterpart/build/libs/java-counterpart.jar
 
 # Requirements
 RUBY_WASM_URL := https://github.com/ruby/ruby.wasm/releases/download/2.7.0/ruby.wasm
+WASMER_ARTIFACT := wasmer-jni-amd64-linux
+WASMER_VERSION := 0.3.0
 
 clean:
 	cargo clean $(RUST_FLAGS)
@@ -28,7 +30,7 @@ rubywasm_download:
 # Run Ruby example with ruby.wasm
 
 run_rubywasm:
-	wasmtime --dir ruby ./runtimes/random_numbers.wasm -- ruby/hello.rb
+	wasmtime --dir ruby ./runtimes/ruby.wasm -- ruby/numbers.rb
 # Run Rust examples
 
 run_wasmtime: $(RUST_OUT)
@@ -37,8 +39,7 @@ run_wasmtime: $(RUST_OUT)
 run_wasmer: $(RUST_OUT)
 	wasmer $(RUST_OUT)
 
-java_build $(JAVA_OUT):
-	./gradlew :java-counterpart:build
-
-java_run: $(JAVA_OUT)
-	java -jar $(JAVA_OUT)
+install_wasmer:
+	curl "https://github.com/wasmerio/wasmer-java/releases/download/0.3.0/$(WASMER_ARTIFACT)-$(WASMER_VERSION).jar" -sLO
+	@mvn install:install-file -Dfile=wasmer-jni-amd64-linux-0.3.0.jar -DgroupId="org.wasmer" -DartifactId="$(WASMER_ARTIFACT)" -Dversion="$(WASMER_VERSION)" -Dpackaging="jar"
+	@rm wasmer-jni-amd64-linux-0.3.0.jar

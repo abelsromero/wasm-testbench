@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':java-api')
+    implementation project(':rust')
+    implementation "org.wasmer:wasmer-jni-amd64-linux:0.3.0"
+
+    testImplementation(platform('org.junit:junit-bom:5.11.3'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.named('test') {
+    dependsOn(':rust:build')
+    useJUnitPlatform()
+}
