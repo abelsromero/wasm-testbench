@@ -1,5 +1,7 @@
 package org.example;
 
+import com.dylibso.chicory.runtime.ExportFunction;
+import com.dylibso.chicory.runtime.Instance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -14,8 +16,9 @@ class ChicoryModuleRunnerTest {
 
     private static final String NUMBERS_MODULE = "random_numbers.wasm";
     private static final String HELLO_MODULE = "hello.wasm";
+    private static final String ADD_LIBRARY = "library.wasm";
 
-    private final ModuleRunner runner = new ChicoryModuleRunner();
+    private final ChicoryModuleRunner runner = new ChicoryModuleRunner();
 
     @ParameterizedTest
     @MethodSource("compilationTargets")
@@ -37,6 +40,21 @@ class ChicoryModuleRunnerTest {
         String output = runner.run(modulePath, List.of("Testy"), REDIRECT_OUTPUT);
 
         assertThat(output).isEqualTo("Hello Testy!\n");
+    }
+
+    @ParameterizedTest
+    @MethodSource("compilationTargets")
+    void should_load_Rust_library(String target) {
+        final String modulePath = moduleLocation(ADD_LIBRARY, target);
+
+        LoadResult result = runner.load(modulePath, List.of());
+        Instance instance = (Instance) result.instance();
+
+        ExportFunction start = instance.export("add");
+
+        long[] apply = start.apply(42, 73);
+        assertThat(apply).hasSize(1);
+        assertThat(apply[0]).isEqualTo(115);
     }
 
     private static String moduleLocation(String name, String target) {

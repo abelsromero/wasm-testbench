@@ -30,12 +30,12 @@ public class ChicoryModuleRunner implements ModuleRunner {
 
     public String run(String modulePath, List<String> args, Options... options) {
         final var result = load(modulePath, args, options);
-        // NOTE: Also works. Runs _start on init, hence main method is run.
+        // NOTE: Also works. Runs _start on init, so test Rust modules work.
         // createInstance(wasi, module);
         return result.output();
     }
 
-    public RunResult load(String modulePath, List<String> args, Options... options) {
+    public LoadResult load(String modulePath, List<String> args, Options... options) {
         final Module module = Parser.parse(new File(modulePath));
 
         final var fakeStdout = new MockPrintStream();
@@ -56,7 +56,7 @@ public class ChicoryModuleRunner implements ModuleRunner {
 
         Instance instance = createStore(wasi, module);
 
-        return new RunResult(instance, fakeStdout.output());
+        return new LoadResult(instance, fakeStdout.output());
     }
 
     private static Instance createInstance(WasiPreview1 wasi, Module module) {
@@ -72,9 +72,6 @@ public class ChicoryModuleRunner implements ModuleRunner {
         return new Store()
             .addFunction(wasi.toHostFunctions())
             .instantiate("my-module", module);
-    }
-
-    record RunResult(Instance instance, String output) {
     }
 
     private final class MockPrintStream extends PrintStream {
