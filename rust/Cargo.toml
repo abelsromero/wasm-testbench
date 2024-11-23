@@ -11,6 +11,10 @@ path = "src/random_numbers.rs"
 name = "hello"
 path = "src/hello.rs"
 
+[lib]
+name = "library"
+crate-type = ["cdylib"]
+path = "src/library.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

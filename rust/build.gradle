@@ -4,26 +4,34 @@ plugins {
 
 def compilationTargets = [
 //    'wasm32-unknown-emscripten',
-    'wasm32-unknown-unknown',
-    'wasm32-wasi',
-    'wasm32-wasip1',
+'wasm32-unknown-unknown',
+'wasm32-wasi',
+'wasm32-wasip1',
 //    wasm32-wasip1-threads,
-    'wasm32-wasip2'
+'wasm32-wasip2'
 ]
 
-String[] buildCommand(String bin, String target) {
+String[] buildBinCommand(String bin, String target) {
     return new String[]{'cargo', 'build', '--bin', bin, '--target', target, '--release'}
+}
+
+String[] buildLibCommand(String target) {
+    // seems a project can only have one?
+    return new String[]{'cargo', 'build', '--lib', '--target', target, '--release'}
 }
 
 tasks.named('build') {
     dependsOn tasks.matching { it.name.startsWith('build-') }
 }
 
-['random_numbers', 'hello'].each { bin ->
-    compilationTargets.each { target ->
+compilationTargets.each { target ->
+    ['random_numbers', 'hello'].each { bin ->
         tasks.register("build-${bin}-${target}", Exec) {
-            commandLine buildCommand(bin, target)
+            commandLine buildBinCommand(bin, target)
         }
+    }
+    tasks.register("build-library-${target}", Exec) {
+        commandLine buildLibCommand(target)
     }
 }
 
