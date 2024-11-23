@@ -1,0 +1,3 @@
+= Java implementation
+
+Example of random numbers printers to compare execution time.
